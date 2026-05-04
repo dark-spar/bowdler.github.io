@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="bowdler">
+  <rect width="256" height="256" rx="48" fill="#0d1117"/>
+  <path fill-rule="evenodd" fill="#e6edf3" d="M56 48 L148 48 C184 48 200 66 200 88 C200 110 184 128 148 128 C188 128 208 148 208 172 C208 194 188 208 152 208 L56 208 Z M92 76 L144 76 C162 76 172 84 172 96 C172 110 162 116 144 116 L92 116 Z M92 144 L148 144 C168 144 180 154 180 172 C180 190 168 196 148 196 L92 196 Z"/>
+  <rect x="20" y="118" width="216" height="20" rx="2" fill="#ffa657"/>
+</svg>

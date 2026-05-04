@@ -1,0 +1,56 @@
+baseURL = "https://bowdler.github.io/"
+title = "bowdler"
+enableRobotsTXT = true
+
+defaultContentLanguage = "en"
+
+[languages]
+  [languages.en]
+    locale = "en-US"
+    label = "English"
+    weight = 1
+
+[params]
+  tagline = "Family-friendly cuts of the media you already own."
+  description = "Local, GPU-accelerated video filter that detects nudity and profanity and produces a family-friendly version. Personal use only."
+  repo = "https://github.com/bowdler/bowdler"
+  author = "Matt Moore"
+
+[markup]
+  [markup.highlight]
+    noClasses = false
+    lineNos = false
+    codeFences = true
+    guessSyntax = true
+  [markup.goldmark.renderer]
+    unsafe = true
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 3
+
+[menu]
+  [[menu.main]]
+    name = "Home"
+    pageRef = "/"
+    weight = 10
+  [[menu.main]]
+    name = "Quickstart"
+    pageRef = "/docs/quickstart"
+    weight = 20
+  [[menu.main]]
+    name = "CLI"
+    pageRef = "/docs/cli"
+    weight = 30
+  [[menu.main]]
+    name = "Config"
+    pageRef = "/docs/config"
+    weight = 40
+  [[menu.main]]
+    name = "About"
+    pageRef = "/about"
+    weight = 50
+
+[outputs]
+  home = ["HTML"]
+  section = ["HTML"]
+  page = ["HTML"]

@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 880 256" fill="currentColor" role="img" aria-labelledby="bowdler-wordmark-title">
+  <title id="bowdler-wordmark-title">Bowdler</title>
+  <g>
+    <path fill-rule="evenodd" d="M56 48 L148 48 C184 48 200 66 200 88 C200 110 184 128 148 128 C188 128 208 148 208 172 C208 194 188 208 152 208 L56 208 Z M92 76 L144 76 C162 76 172 84 172 96 C172 110 162 116 144 116 L92 116 Z M92 144 L148 144 C168 144 180 154 180 172 C180 190 168 196 148 196 L92 196 Z"/>
+    <rect x="20" y="118" width="216" height="20" rx="2"/>
+  </g>
+  <text x="288" y="128" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="128" font-weight="700" letter-spacing="-4" dominant-baseline="central">bowdler</text>
+</svg>

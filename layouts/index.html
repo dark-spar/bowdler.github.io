@@ -1,0 +1,133 @@
+{{ define "main" }}
+<section class="hero">
+  <div class="container hero-inner">
+    <div class="hero-eyebrow">
+      <span class="status-dot" aria-hidden="true"></span>
+      Personal use · Local · GPU
+    </div>
+    <h1 class="hero-title">
+      <span class="redact" data-reveal="family">██████</span>-friendly cuts of the media you already own.
+    </h1>
+    <p class="hero-lede">
+      <strong>bowdler</strong> is a local, GPU-accelerated video filter that detects
+      nudity and profanity and produces a family-friendly version by blurring sensitive
+      regions and muting offending words. Named after Thomas Bowdler, whose
+      <em>Family Shakespeare</em> (1818) was the same idea two centuries earlier.
+    </p>
+    <div class="hero-cta">
+      <a class="btn btn-primary" href="{{ "docs/quickstart" | relURL }}">Get started <span aria-hidden="true">→</span></a>
+      <a class="btn btn-ghost" href="{{ site.Params.repo }}" rel="noopener">View on GitHub</a>
+    </div>
+    <div class="hero-terminal" aria-hidden="false">
+      <div class="terminal-chrome">
+        <span class="terminal-dot terminal-dot-r"></span>
+        <span class="terminal-dot terminal-dot-y"></span>
+        <span class="terminal-dot terminal-dot-g"></span>
+        <span class="terminal-title">~/movies — bowdler</span>
+      </div>
+      <pre class="terminal-body"><code><span class="t-prompt">$</span> <span class="t-cmd">bowdler run</span> movie.mkv -o movie.bowdler.mkv
+<span class="t-muted">┃</span> probe        <span class="t-ok">✓</span> 1h 47m · 1080p · h264 · stereo
+<span class="t-muted">┃</span> hash         <span class="t-ok">✓</span> blake3 · cache miss
+<span class="t-muted">┃</span> decode       <span class="t-ok">✓</span> NVDEC · 154,728 frames
+<span class="t-muted">┃</span> vision       <span class="t-ok">✓</span> NudeNet · 12 segments flagged
+<span class="t-muted">┃</span> audio        <span class="t-ok">✓</span> whisper-medium.en · 47 words flagged
+<span class="t-muted">┃</span> approve      <span class="t-warn">⏵</span> 11/12 video · 39/47 audio (auto)
+<span class="t-muted">┃</span> render       <span class="t-ok">✓</span> ffmpeg · libx264 · crf 23
+<span class="t-prompt">$</span> <span class="t-cursor">█</span></code></pre>
+    </div>
+  </div>
+</section>
+
+<section class="container section">
+  <header class="section-head">
+    <p class="eyebrow">How it works</p>
+    <h2 class="section-title">Detection, review, and rendering — three separate stages.</h2>
+  </header>
+  <pre class="pipeline" aria-label="Pipeline diagram"><code>input.mkv ──┬─ NVDEC decode ─→ NudeNet (ONNX/CUDA) ─→ tracker ─→ blur segments ──┐
+            │                                                                     │
+            └─ audio extract ─→ Whisper (Vulkan)    ─→ wordlist  ─→ mute ranges ─┤
+                                                                                  ▼
+                                                                  EditDecisionList
+                                                                   (cached + reviewable)
+                                                                                  │
+                                                                                  ▼
+                                                            ffmpeg compositor → output.mkv</code></pre>
+</section>
+
+<section class="container section">
+  <header class="section-head">
+    <p class="eyebrow">Principles</p>
+    <h2 class="section-title">Five things bowdler is opinionated about.</h2>
+  </header>
+  <ol class="features">
+    <li class="feature">
+      <span class="feature-num">01</span>
+      <h3 class="feature-title">Blur, don't cut.</h3>
+      <p>Cutting breaks runtime, audio sync, and keyframe alignment. Blurring detected regions is less destructive — a false-positive blur is recoverable; a false-positive cut is not.</p>
+    </li>
+    <li class="feature">
+      <span class="feature-num">02</span>
+      <h3 class="feature-title">Mute words, don't drop audio.</h3>
+      <p>Word-level timestamps from Whisper let bowdler silence individual words without touching video — no lip-sync drift, no awkward gaps.</p>
+    </li>
+    <li class="feature">
+      <span class="feature-num">03</span>
+      <h3 class="feature-title">Detection and rendering are separate.</h3>
+      <p>Run detection once, cache to RocksDB keyed by file hash, then render. Re-tuning thresholds doesn't re-infer.</p>
+    </li>
+    <li class="feature">
+      <span class="feature-num">04</span>
+      <h3 class="feature-title">Manual review is first-class.</h3>
+      <p>The TUI is not optional. Every detection gets a thumbnail or transcript line and an approve/reject toggle before anything renders.</p>
+    </li>
+    <li class="feature">
+      <span class="feature-num">05</span>
+      <h3 class="feature-title">GPU-resident pipeline.</h3>
+      <p>Frames stay in CUDA memory from NVDEC through inference through blur. No host roundtrips on the hot path.</p>
+    </li>
+  </ol>
+</section>
+
+<section class="container section">
+  <header class="section-head">
+    <p class="eyebrow">Three CLI personas</p>
+    <h2 class="section-title">Use the workflow that fits your patience.</h2>
+  </header>
+  <div class="cli-grid">
+    <article class="cli-card">
+      <h3><code>bowdler detect</code></h3>
+      <p>Run vision + audio detection. Cache the result to RocksDB keyed by the file hash.</p>
+      <pre><code>bowdler detect movie.mkv \
+  -o movie.edl.json</code></pre>
+    </article>
+    <article class="cli-card">
+      <h3><code>bowdler review</code></h3>
+      <p>TUI for stepping through detections. Inline thumbnails via kitty/iTerm/sixel; halfblock fallback otherwise.</p>
+      <pre><code>bowdler review movie.mkv</code></pre>
+    </article>
+    <article class="cli-card">
+      <h3><code>bowdler render</code></h3>
+      <p>Single-pass FFmpeg <code>filter_complex</code>: boxblur each approved region, silence each approved word.</p>
+      <pre><code>bowdler render movie.mkv \
+  -o movie.bowdler.mkv</code></pre>
+    </article>
+    <article class="cli-card cli-card-feature">
+      <h3><code>bowdler run</code></h3>
+      <p>One-shot: detect → auto-approve high-confidence items → render. Items below the floor are auto-rejected with a warning; revisit with <code>review</code> if you disagree.</p>
+      <pre><code>bowdler run movie.mkv \
+  -o movie.bowdler.mkv</code></pre>
+    </article>
+  </div>
+</section>
+
+<section class="container section section-cta">
+  <div class="cta">
+    <h2 class="cta-title">Ready to build it?</h2>
+    <p class="cta-lede">The quickstart walks through dependencies, models, and your first render. Budget ~10 minutes for the cold compile.</p>
+    <div class="cta-actions">
+      <a class="btn btn-primary" href="{{ "docs/quickstart" | relURL }}">Quickstart <span aria-hidden="true">→</span></a>
+      <a class="btn btn-ghost" href="{{ "docs/cli" | relURL }}">CLI reference</a>
+    </div>
+  </div>
+</section>
+{{ end }}

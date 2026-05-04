@@ -1,0 +1,26 @@
+# Hugo
+/public/
+/resources/_gen/
+.hugo_build.lock
+hugo_stats.json
+
+# Hugo modules / npm (in case modules are introduced later)
+node_modules/
+package-lock.json
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs / env
+*.log
+.env
+.env.local

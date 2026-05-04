@@ -1,0 +1,25 @@
+{{ define "main" }}
+<section class="container prose">
+  <header class="page-header">
+    <h1 class="page-title">{{ .Title }}</h1>
+    {{- with .Description }}<p class="page-lede">{{ . }}</p>{{ end -}}
+  </header>
+  <div class="page-content">
+    {{ .Content }}
+    {{- $pages := .Pages.ByWeight -}}
+    {{- if $pages -}}
+    <ul class="card-list">
+      {{- range $pages -}}
+      <li>
+        <a class="card" href="{{ .RelPermalink }}">
+          <h2 class="card-title">{{ .Title }}</h2>
+          {{- with .Description }}<p class="card-desc">{{ . }}</p>{{ end -}}
+          <span class="card-cta">Read <span aria-hidden="true">→</span></span>
+        </a>
+      </li>
+      {{- end -}}
+    </ul>
+    {{- end -}}
+  </div>
+</section>
+{{ end }}
