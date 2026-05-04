@@ -13,7 +13,7 @@ defaultContentLanguage = "en"
 [params]
   tagline = "Family-friendly cuts of the media you already own."
   description = "Local, GPU-accelerated video filter that detects nudity and profanity and produces a family-friendly version. Personal use only."
-  repo = "https://github.com/bowdler/bowdler"
+  repo = "https://github.com/dark-spar/bowdler"
   author = "Matt Moore"
 
 [markup]
